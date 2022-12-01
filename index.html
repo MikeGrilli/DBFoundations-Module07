@@ -1,0 +1,53 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700;900&display=swap" rel="stylesheet"> 
+        <link rel="stylesheet" href="./main.css" />
+        <title>Assignment07_mGrilli</title>
+    </head>
+    <body>
+        <div class="main-wrapper">
+            <h1>
+                <span class ="span-headline">Assignment 07 <br /></span> FUNCTIONS
+            </h1>
+            <div class="content-summary">
+                <h2 class="subhead">Summery</h2>
+                <p>This week we expanded our knowledge by adding SQL functions to our ever-growing toolkit. These functions come in a variety of formats and have several different use cases. These functions include Scalar, Inline, Multi-statement, and User Defined Functions (UDF). Functions are a slick way to allow users to execute very lengthy and complex code over and over without knowing how things are working in the background. </p>
+            </div>
+            <hr>
+            <div class="content-topic">
+                <h2 class="subhead">Topic 1: <span class="topic-desc">When to use a UDF</span></h2>
+                <p>User defined function is a database object that is used to save a lengthy or complicated query so that it can be ran repeatedly using simple commands. A function can return a single value back to the caller, or it can return a result set. Through the use of parameters, functions can also be made dynamic.</p>
+            </div>
+            <hr>
+            <div class="content-topic">
+                <h2 class="subhead">Topic 2: <span class="topic-desc">Explain are the Differences between
+                    <br /> Scalar, Inline, and Multi-Statement Functions</span></h2>
+                <ul>
+                    <li>
+                        A <span class="showcase">Scalar Function</span> is a function that returns a single value back to the caller. A Scalar Valued Function can be used anywhere a single value is expected. You can pass in one or more parameters to a Scalar Valued Function and do work based on those parameters. </li>
+
+                    <li>
+                        A <span class="showcase">Table Function</span> returns a result set to the caller by way of an inner SELECT statement that is part of the function definition. You can query an Inline Table Valued function similar to how you would query a table. They accept input parameters which allow them to return a different result set depending on the parameters passed in.
+                    </li>
+                    <li>
+                        A <span class="showcase">Multi Statement Function</span> returns the result set of a table variable that is created, defined, and populated within the definition of the function. The advantage of a Multi Statement Table Valued function is you have complete control over the definition of the table variable, including naming your columns, as well as setting up appropriate data types, constraints, indexes, etc. 
+                    </li>
+                </ul>
+            </div>
+            <hr>
+            <div class="content-topic">
+                <h2 class="subhead">Conclusion</h2>
+                <p>SQL Functions are great tools that allow for a more robust, yet more convenient user experience for the people we develop for. In SQL there a 3 main types at our deposal, they include the Scalar, the inline, and the Multi–statement functions. These functions allow us to keep out code DRY and easy to use, all the while giving users to have more control of the data they get back.</p>
+                <br />
+                <br />
+                <br />
+            </div>
+        </div>
+    </body>
+    
+</html>
