@@ -62,11 +62,21 @@ font-size: 4rem;
 
 ul {
     width:60%;
+    list-style: none; 
+    margin-left:15px;
 }
 
 li {
-    margin-top: 1.5rem;
-    margin-right: 30px;
+    margin-bottom:25px;
+}
+
+ul li::before {
+    content: "\2022";  
+    color: #ee2c72; 
+    font-weight: bold;
+    display: inline-block; 
+    width: 1em; 
+    margin-left: -1em; 
 }
 
 hr {
