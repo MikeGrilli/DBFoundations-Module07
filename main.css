@@ -16,13 +16,19 @@
     padding:50px;
 }
 
+header {
+    margin:75px;
+}
+
 h1 {
-    margin-top:25px;
     font-size: 4rem;
     color: #ee2c72;
-    margin-bottom: 25px;
-    padding:50px;
-    margin-left:25px;
+}
+
+h3 {
+    font-weight:500;
+    color: #58595b;
+    margin-bottom:0;
 }
 
 p {
@@ -32,7 +38,7 @@ p {
 
 .showcase {
     color:#ee2c72;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .span-headline {
