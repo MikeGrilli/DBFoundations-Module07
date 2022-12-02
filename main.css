@@ -11,7 +11,6 @@
     max-width: 75%;
     margin:0 auto;
     height:auto;
-    margin-bottom:50px;
     background-color: #f2f2f2;
     padding:50px;
 }
@@ -43,8 +42,8 @@ p {
 }
 
 .span-headline {
-font-size: 4rem;
-  font-weight: 100;  
+    font-size: 4rem;
+    font-weight: 100;  
 }
 
 .content-summary {
@@ -94,5 +93,16 @@ hr {
     margin-left:4rem;
     margin-bottom:25px;
     color:#ee2c72;
+}
+
+footer {
+    background-color:#ee2c72;
+}
+
+.footer-p {
+    padding:25px;
+    color:white;
+    text-align: center;
+    margin:0 auto;
     
 }
