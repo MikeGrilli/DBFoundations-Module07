@@ -194,94 +194,103 @@ Print
 -- Use a function to format the price as US dollars.
 -- Order the result by the product name.
 
-
 -- <Put Your Code Here> --
-
-/*
+/* 
 1)
-SELECT * FROM vProducts
+SELECT
+	productName ,
+	unitPrice 
+FROM 
+	vProducts
+GO
 
 2)
-SELECT 
-	ProductName, UnitPrice
+SELECT
+	productName ,
+	Format( unitPrice, 'C', 'en-US' ) Price
 FROM 
-	Products
-ORDER BY
-	ProductName
+	vProducts
+GO
 
 3)
-SELECT 
-	ProductName, Format( UnitPrice, 'C','en-US' ) AS Price
+SELECT
+	productName ,
+	Format( unitPrice, 'C', 'en-US' ) Price
 FROM 
-	Products
-ORDER 
-	BY ProductName
+	vProducts
+ORDER BY
+	1
 GO
 */
 
-SELECT 
-	ProductName, 
-	Format( UnitPrice, 'C','en-US' ) AS Price
+--SOLUTION 1
+SELECT
+	productName ,
+	Format( unitPrice, 'C', 'en-US' ) AS unitPrice
 FROM 
-	Products
-ORDER BY 
-	ProductName
+	vProducts
+ORDER BY
+	1
 GO
 
 -- Question 2 (10% of pts): 
 -- Show a list of Category and Product names, and the price of each product.
 -- Use a function to format the price as US dollars.
 -- Order the result by the Category and Product.
+
 -- <Put Your Code Here> --
 /*
-
 1)
-SELECT * FROM vProducts
-SELECT * FROM vCategories
+SELECT 
+	CategoryName ,
+	ProductName 
+FROM 
+	vCategories
+INNER JOIN
+	vProducts
+ON
+	vCategories.CategoryID = vProducts.CategoryID
 
 2)
 SELECT 
-	vCategories.CategoryName,
-	vProducts.ProductName,
-	vProducts.UnitPrice
-FROM
+	CategoryName ,
+	ProductName ,
+	Format( unitPrice, 'C', 'en-US')
+FROM 
 	vCategories
-JOIN
+INNER JOIN
 	vProducts
 ON
-	 vCategories.CategoryID = vProducts.CategoryID
+	vCategories.CategoryID = vProducts.CategoryID
 
 3)
 SELECT 
-	vCategories.CategoryName,
-	vProducts.ProductName,
-	Format( UnitPrice, 'C','en-US' ) AS Price
-FROM
+	CategoryName ,
+	ProductName ,
+	[Price] = Format( unitPrice, 'C', 'en-US')
+FROM 
 	vCategories
-JOIN
+INNER JOIN
 	vProducts
 ON
-	 vCategories.CategoryID = vProducts.CategoryID
-
+	vCategories.CategoryID = vProducts.CategoryID
 ORDER BY
-	1,2
-
-*/
-
+	1, 2
+*/ 
+--SOLUTION 2
 SELECT 
-	vCategories.CategoryName,
-	vProducts.ProductName,
-	Format( UnitPrice, 'C','en-US' )  AS Price
-FROM
+	CategoryName ,
+	ProductName ,
+	unitPrice = Format( unitPrice, 'C', 'en-US')
+FROM 
 	vCategories
-JOIN
+INNER JOIN
 	vProducts
 ON
-	 vCategories.CategoryID = vProducts.CategoryID
+	vCategories.CategoryID = vProducts.CategoryID
 ORDER BY
-	1,2
+	1, 2
 GO
-
 -- Question 3 (10% of pts): 
 -- Use functions to show a list of Product names, each Inventory Date, and the Inventory Count.
 -- Format the date like 'January, 2017'.
@@ -290,50 +299,59 @@ GO
 -- <Put Your Code Here> --
 /*
 1)
-SELECT * FROM vProducts
-SELECT * FROM vInventories
+SELECT
+	ProductName ,
+	InventoryDate ,
+	Count
+FROM 
+	vProducts
+INNER JOIN
+	vInventories
+ON 
+	vProducts.ProductID = vInventories.ProductID
 
 2)
-SELECT 
-	vProducts.ProductName,
-	vInventories.InventoryDate,
-	vInventories.Count
+SELECT
+	ProductName ,
+	[Date] = DateName(mm, vInventories.InventoryDate) + ' , ' + DateName(yy, vInventories.InventoryDate), 
+	Count
 FROM 
 	vProducts
-JOIN
+INNER JOIN
 	vInventories
-ON
+ON 
 	vProducts.ProductID = vInventories.ProductID
+ORDER BY 1
 
 3)
-
-SELECT 
-	vProducts.ProductName,
-	[Date] = DateName(mm, vInventories.InventoryDate) + ' , ' + DateName(Year, vInventories.InventoryDate), 
-	vInventories.Count
+SELECT
+	ProductName ,
+	[Date] = DateName(mm, vInventories.InventoryDate) + ' , ' + DateName(yy, vInventories.InventoryDate), 
+	Count
 FROM 
 	vProducts
 JOIN
 	vInventories
-ON
+ON 
 	vProducts.ProductID = vInventories.ProductID
-ORDER BY 1,2
+ORDER BY
+	1, 2
 */
-
-SELECT 
-	vProducts.ProductName,
-	[Date] = DateName(Month, vInventories.InventoryDate) + ' , ' + DateName(Year, vInventories.InventoryDate), 
-	vInventories.Count
+--SOLUTION 3
+SELECT
+	ProductName ,
+	DateName(mm, vInventories.InventoryDate) + ' , ' + DateName(yy, vInventories.InventoryDate) AS Date, 
+	Count AS InventortCount
 FROM 
 	vProducts
-JOIN
+INNER JOIN
 	vInventories
-ON
+ON 
 	vProducts.ProductID = vInventories.ProductID
-ORDER BY 
-	1,2
-
+ORDER BY
+	1, 2
 GO
+
 -- Question 4 (10% of pts): 
 -- CREATE A VIEW called vProductInventories. 
 -- Shows a list of Product names, each Inventory Date, and the Inventory Count. 
@@ -343,49 +361,69 @@ GO
 -- <Put Your Code Here> --
 /*
 1)
-CREATE VIEW 
-	vProductInventories 
-WITH
-	SCHEMABINDING 
+CREATE VIEW
+	vProductInventories
+AS
+	SELECT
+		ProductName ,
+		IncentoryDate ,
+		Count
+	FROM 
+		vProducts
 
-2)
-CREATE VIEW --DROP VIEW
-	vProductInventories 
-AS 
-SELECT TOP 200
-	vProducts.ProductName,
-	[Date] = DateName(Month, vInventories.InventoryDate) + ' , ' + DateName(Year, vInventories.InventoryDate), 
-	vInventories.Count
-FROM 
-	vProducts
-JOIN
-	vInventories
-ON 
-	vProducts.ProductID = vInventories.ProductID
-ORDER By
-	1
-GO
-
+2) 
+CREATE VIEW
+	vProductInventories
+AS
+	SELECT
+		ProductName ,
+		InventoryDate ,
+		Count
+	FROM 
+		vProducts
+	INNER JOIN
+		vInventories
+	ON 
+		vProducts.ProductID = vInventories.ProductID
+	ORDER BY
+		1, 2
+3) 
+CREATE VIEW
+	vProductInventories
+AS
+	SELECT
+		ProductName ,
+		[Date] = DateName(mm, vInventories.InventoryDate) + ' , ' + DateName(yy, vInventories.InventoryDate) ,
+		Count
+	FROM 
+		vProducts
+	INNER JOIN
+		vInventories
+	ON 
+		vProducts.ProductID = vInventories.ProductID
 */
 
-CREATE VIEW --DROP VIEW
-	vProductInventories 
-AS 
-SELECT TOP 200
-	vProducts.ProductName,
-	[Date] = DateName(Month, vInventories.InventoryDate) + ' , ' + DateName(Year, vInventories.InventoryDate), 
-	vInventories.Count
-FROM 
-	vProducts
-JOIN
-	vInventories
-ON 
-	vProducts.ProductID = vInventories.ProductID
-ORDER By
-	1
-GO
--- Check that it works: Select * From vProductInventories;
+--SOLUTION 4
 
+CREATE VIEW 
+	vProductInventories
+AS
+	SELECT TOP 10000000
+		ProductName ,
+		[Date] = DateName(mm, vInventories.InventoryDate) + ' , ' + DateName(yy, vInventories.InventoryDate) ,
+		Count 
+	FROM 
+		vProducts
+	INNER JOIN
+		vInventories
+	ON 
+		vProducts.ProductID = vInventories.ProductID
+ORDER BY 
+1, 2
+GO
+SELECT * FROM vProductInventories;
+GO
+-- Check that it works: 
 
 -- Question 5 (10% of pts): 
 -- CREATE A VIEW called vCategoryInventories. 
@@ -395,25 +433,25 @@ GO
 
 -- <Put Your Code Here> --
 /*
-1)
-CREATE VIEW --DROP VIEW
-	vCategoryInventories 
-AS 
-SELECT
-	Categories.CategoryName,
-	[Date] = DateName(Month, vInventories.InventoryDate) + ' , ' + DateName(Year, vInventories.InventoryDate), 
-	COUNT(Inventories.InvetoryCount)
+1) 
+SELECT TOP 1000000
+	vCategories.CategoryName,
+	[Date] = DateName(Month, vInventories.InventoryDate) + ' , ' + DateName(Year, vInventories.InventoryDate),
+	[Total Inventory Count] = Sum(vInventories.Count)
 FROM
-	Categories
-	
+	vCategories
+JOIN
+	vProducts
+ON 
+	vCategories.CategoryID = vProducts.CategoryID
+JOIN
+	vInventories
+
 2)
-CREATE VIEW --DROP VIEW
-	vCategoryInventories 
-AS 
-SELECT 
+SELECT
 	vCategories.CategoryName,
-	[Date] = DateName(Month, vInventories.InventoryDate) + ' , ' + DateName(Year, vInventories.InventoryDate),
-	Sum(vInventories.Count) AS [Total Inventory Count]
+	[Date] = DateName(Month, vInventories.InventoryDate) + ' , ' + DateName(Year, vInventories.InventoryDate) ,
+	[Total Inventory Count] = Sum(vInventories.Count)
 FROM
 	vCategories
 JOIN
@@ -423,39 +461,64 @@ ON
 JOIN
 	vInventories
 ON
-	vProducts.ProductID = vInventories.ProductID
+	vProducts.ProductID = vInventories.ProductID	
 GROUP BY 
 	vCategories.CategoryName,
 	vInventories.InventoryDate
-ORDER BY 1
-GO
-*/
+ORDER BY
+	1
 
-CREATE VIEW --DROP VIEW
+2) 
+CREATE VIEW
 	vCategoryInventories
-AS 
-SELECT TOP 200
-	vCategories.CategoryName,
-	[Date] = DateName(Month, vInventories.InventoryDate) + ' , ' + DateName(Year, vInventories.InventoryDate),
-	Sum(vInventories.Count) AS [Total Inventory Count]
-FROM
-	vCategories
-JOIN
-	vProducts
-ON 
-	vCategories.CategoryID = vProducts.CategoryID
-JOIN
-	vInventories
-ON
-	vProducts.ProductID = vInventories.ProductID
+AS
+	SELECT TOP 100000000
+		vCategories.CategoryName,
+		[Date] = DateName(Month, vInventories.InventoryDate) + ' , ' + DateName(Year, vInventories.InventoryDate) ,
+		[Total Inventory Count] = Sum(vInventories.Count)
+	FROM
+		vCategories
+	JOIN
+		vProducts
+	ON 
+		vCategories.CategoryID = vProducts.CategoryID
+	JOIN
+		vInventories
+	ON
+		vProducts.ProductID = vInventories.ProductID	
 GROUP BY 
 	vCategories.CategoryName,
 	vInventories.InventoryDate
-ORDER BY 1
+ORDER BY
+	1
+*/
+--SOLUTION 5
+
+CREATE VIEW
+	vCategoryInventories
+AS
+	SELECT TOP 100000000
+		vCategories.CategoryName AS CategoryName,
+		DateName(Month, vInventories.InventoryDate) + ' , ' + DateName(Year, vInventories.InventoryDate) AS InventoryDate, 
+		Sum(Count) AS TotalInventoryCount
+	FROM
+		vCategories
+	JOIN
+		vProducts
+	ON 
+		vCategories.CategoryID = vProducts.CategoryID
+	JOIN
+		vInventories
+	ON
+		vProducts.ProductID = vInventories.ProductID	
+GROUP BY 
+	CategoryName ,
+	InventoryDate
+ORDER BY
+	1
 GO
-
--- Check that it works: Select * From vCategoryInventories;
-
+SELECT * FROM vCategoryInventories
+GO
 
 -- Question 6 (10% of pts): 
 -- CREATE ANOTHER VIEW called vProductInventoriesWithPreviouMonthCounts. 
@@ -465,73 +528,58 @@ GO
 -- This new view must use your vProductInventories view.
 
 -- <Put Your Code Here> --
-
 /*
-1)
-CREATE VIEW 
-	vProductInventoriesWithPreviouMonthCounts
-AS
-SELECT
-	vProducts.ProductName,
-	vInventories.InventoryName,
-	vInventories.Count,
-	LAG(vInventories.InventoryDate,1) OVER (ORDER BY Year) AS [PRevious Month Count]
+1) 
+SELECT 
+	ProductName,
+	Date , 
+	Count ,
+	[Previous Month Count] = ISNULL( LAG(Count,1) OVER (ORDER BY ProductName, Date), 0)
 FROM 
-	vPRroducts
-
-2)
-CREATE VIEW 
-	vProductInventoriesWithPreviouMonthCounts
-AS
-SELECT
-	vProducts.ProductName,
-	vInventories.InventoryDate,
-	ISNULL(vInventories.Count, 0),
-	LAG(vInventories.Count,1) OVER (ORDER BY vInventories.InventoryDate) AS [Previous Month Count]
+	vProductInventories
 	
+2)
+SELECT 
+	ProductName,
+	Date , 
+	Count ,
+	[Previous Month Count] = ISNULL( LAG(Count,1) OVER (ORDER BY ProductName, Date), 0)
 FROM 
-	vProducts
-JOIN 
-	vInventories
-ON 
-	vProducts.ProductID = vInventories.ProductID
+	vProductInventories
+ORDER BY
+	1, 2
 
 3)
-CREATE VIEW 
+CREATE VIEW
 	vProductInventoriesWithPreviouMonthCounts
 AS
-SELECT
-	vProducts.ProductName,
-	[InventoryDate] = DateName(Month, vInventories.InventoryDate) + ' , ' + DateName(Year, vInventories.InventoryDate),
-	vInventories.Count,
-	[Previous Month Count] = ISNULL( LAG(vInventories.Count,1) OVER (ORDER BY vProducts.ProductName, InventoryDate), 0 ) 
-FROM 
-	vProducts
-JOIN 
-	vInventories
-ON 
-	vProducts.ProductID = vInventories.ProductID
-
+	SELECT TOP 10000000
+		ProductName,
+		Date , 
+		Count ,
+		[Previous Month Count] = ISNULL( LAG(Count,1) OVER (ORDER BY ProductName, Date), 0)
+	FROM 
+		vProductInventories
+ORDER BY
+	1, 2
 */
-CREATE VIEW --DROP
+--SOLUTION 6
+CREATE VIEW
 	vProductInventoriesWithPreviouMonthCounts
 AS
-SELECT
-	vProducts.ProductName,
-	[InventoryDate] = DateName(Month, vInventories.InventoryDate) + ' , ' + DateName(Year, vInventories.InventoryDate),
-	vInventories.Count,
-	[Previous Month Count] = ISNULL( LAG(vInventories.Count,1) OVER (ORDER BY vProducts.ProductName, InventoryDate), 0 ) 
-FROM 
-	vProducts
-JOIN 
-	vInventories
-ON 
-	vProducts.ProductID = vInventories.ProductID
-
+	SELECT TOP 10000000
+		ProductName ,
+		Date , 
+		InventoryCount = ISNULL( [Count], 0 ) ,
+		PreviousMonthCount = IIF(Month(Date) = 1, 0, LAG([Count] ) OVER (ORDER BY ProductName) )
+		
+	FROM 
+		vProductInventories
+ORDER BY 
+	1, 2
 GO
-
---SELECT * FROM vProductInventoriesWithPreviouMonthCounts
-
+SELECT * FROM vProductInventoriesWithPreviouMonthCounts
+GO
 -- Question 7 (15% of pts): 
 -- CREATE a VIEW called vProductInventoriesWithPreviousMonthCountsWithKPIs.
 -- Show columns for the Product names, Inventory Dates, Inventory Count, Previous Month Count. 
@@ -541,67 +589,78 @@ GO
 
 -- <Put Your Code Here> --
 /*
-
 1)
---CREATE VIEW vProductInventoriesWithPreviousMonthCountsWithKPIs
---AS
---SELECT
---	vProducts.ProductName,
---	[InventoryDate] = DateName(Month, vInventories.InventoryDate) + ' , ' + DateName(Year, vInventories.InventoryDate),
---	vInventories.Count,
---	[Previous Month Count] = ISNULL( LAG(vInventories.Count,1) OVER (ORDER BY vProducts.ProductName, InventoryDate), 0 ) ,
---FROM 
---	vProducts
---JOIN 
---	vInventories
---ON 
---	vProducts.ProductID = vInventories.ProductID
+SELECT 
+	*
+FROM 
+	vProductInventoriesWithPreviouMonthCounts
 
 2)
-CREATE VIEW vProductInventoriesWithPreviousMonthCountsWithKPIs
-AS
-SELECT
-	vProducts.ProductName,
-	[InventoryDate] = DateName(Month, vInventories.InventoryDate) + ' , ' + DateName(Year, vInventories.InventoryDate),
-	[InventoryCount] = vInventories.Count, 
-	[Previous Month Count] = ISNULL( LAG(vInventories.Count,1) OVER (ORDER BY vProducts.ProductName, InventoryDate), 0) ,
-	[Count vs Previous Count KPI] = 
-		Case
-			WHEN vInventories.Count < ISNULL( LAG(vInventories.Count,1) OVER (ORDER BY vProducts.ProductName, InventoryDate), 0 )  THEN 1
-			WHEN vInventories.Count = ISNULL( LAG(vInventories.Count,1) OVER (ORDER BY vProducts.ProductName, InventoryDate), 0 )  THEN 0
-			WHEN vInventories.Count > ISNULL( LAG(vInventories.Count,1) OVER (ORDER BY vProducts.ProductName, InventoryDate), 0 )  THEN -1
-		End
+SELECT 
+	ProductName ,
+	Date , 
+	InventoryCount ,
+	PreviousMonthCount
 FROM 
-	vProducts
-JOIN 
-	vInventories
-ON 
-	vProducts.ProductID = vInventories.ProductID
+	vProductInventoriesWithPreviouMonthCounts
 
-GO
-*/
-
-CREATE VIEW vProductInventoriesWithPreviousMonthCountsWithKPIs 
-AS
-SELECT
-	vProducts.ProductName,
-	[InventoryDate] = DateName(Month, vInventories.InventoryDate) + ' , ' + DateName(Year, vInventories.InventoryDate),
-	[InventoryCount] = vInventories.Count, 
-	[Previous Month Count] = ISNULL( LAG(vInventories.Count,1) OVER (ORDER BY vProducts.ProductName, InventoryDate), 0) ,
-	[Count vs Previous Count KPI] = 
-		Case
-			WHEN vInventories.Count > ISNULL( LAG(vInventories.Count,1) OVER (ORDER BY vProducts.ProductName, InventoryDate), 0 )  THEN 1
-			WHEN vInventories.Count = ISNULL( LAG(vInventories.Count,1) OVER (ORDER BY vProducts.ProductName, InventoryDate), 0 )  THEN 0
-			WHEN vInventories.Count < ISNULL( LAG(vInventories.Count,1) OVER (ORDER BY vProducts.ProductName, InventoryDate), 0 )  THEN -1
-		End
+3)
+SELECT 
+	ProductName ,
+	Date , 
+	InventoryCount ,
+	PreviousMonthCount ,
+	PreviousMonthCountKPIs = CASE
+								WHEN InventoryCount  > PreviousMonthCount THEN 1
+								WHEN InventoryCount  = PreviousMonthCount THEN 0
+								WHEN InventoryCount  < PreviousMonthCount THEN -1
+							 END
 FROM 
-	vProducts
-JOIN 
-	vInventories
-ON 
-	vProducts.ProductID = vInventories.ProductID
+	vProductInventoriesWithPreviouMonthCounts
 
+
+4)
+CREATE VIEW 
+	vProductInventoriesWithPreviousMonthCountsWithKPIs
+AS
+	SELECT TOP 1000000000
+			ProductName ,
+			Date , 
+			InventoryCount ,
+			PreviousMonthCount ,
+			PreviousMonthCountKPIs = CASE
+										WHEN InventoryCount  > PreviousMonthCount THEN 1
+										WHEN InventoryCount  = PreviousMonthCount THEN 0
+										WHEN InventoryCount  < PreviousMonthCount THEN -1
+									 END
+FROM 
+	vProductInventoriesWithPreviouMonthCounts
+ORDER BY
+	1	
+*/ 
+--SOULUTION 7
+CREATE VIEW 
+	vProductInventoriesWithPreviousMonthCountsWithKPIs
+AS
+	SELECT TOP 1000000000
+			ProductName ,
+			Date , 
+			InventoryCount ,
+			PreviousMonthCount ,
+			PreviousMonthCountKPIs = 
+				CASE
+					WHEN PreviousMonthCount < InventoryCount THEN 1
+					WHEN PreviousMonthCount = InventoryCount THEN 0
+					WHEN PreviousMonthCount > InventoryCount THEN -1
+				END
+FROM 
+	vProductInventoriesWithPreviouMonthCounts
+ORDER BY
+	1, 2
 GO
+SELECT * FROM vProductInventoriesWithPreviousMonthCountsWithKPIs;
+GO
+
 -- Important: This new view must use your vProductInventoriesWithPreviousMonthCounts view!
 -- Check that it works: Select * From vProductInventoriesWithPreviousMonthCountsWithKPIs;
 
@@ -613,60 +672,70 @@ GO
 -- Display months with increased counts as 1, same counts as 0, and decreased counts as -1. 
 -- The function must use the ProductInventoriesWithPreviousMonthCountsWithKPIs view.
 -- Varify that the results are ordered by the Product and Date.
-/*
 
--- <Put Your Code Here> -
+-- <Put Your Code Here> --
+
+/*
 1)
-SELECT
+SELECT 
 	*
 FROM 
 	vProductInventoriesWithPreviousMonthCountsWithKPIs
+
+2)
+SELECT
+	ProductName ,
+	Date , 
+	InventoryCount ,
+	PreviousMonthCount ,
+	PreviousMonthCountKPIs
+FROM 
+	vProductInventoriesWithPreviousMonthCountsWithKPIs
+
+3)
+CREATE FUNCTION fProductInventoriesWithPreviousMonthCountsWithKPIs (@value AS INT)
+RETURNS TABLE
+AS
+RETURN
+SELECT
+
+4)
+CREATE FUNCTION 
+	fProductInventoriesWithPreviousMonthCountsWithKPIs(@KPIValue INT)
+RETURNS TABLE
+AS
+RETURN
+	SELECT
+		ProductName ,
+		Date , 
+		InventoryCount ,
+		PreviousMonthCount ,
+		PreviousMonthCountKPIs
+FROM 
+	vProductInventoriesWithPreviousMonthCountsWithKPIs
+*/
+--SOLUTION 8
+CREATE FUNCTION 
+	fProductInventoriesWithPreviousMonthCountsWithKPIs(@KPIValue INT)
+RETURNS TABLE
+AS
+RETURN
+	SELECT
+		ProductName ,
+		Date , 
+		InventoryCount ,
+		PreviousMonthCount ,
+		PreviousMonthCountKPIs
+FROM 
+	vProductInventoriesWithPreviousMonthCountsWithKPIs
 WHERE
-	[Count vs Previous Count KPI] = 1
-
-GO 
-
-2) 
-
---DROP FUNCTION fProductInventoriesWithPreviousMonthCountsWithKPIs
+	PreviousMonthCountKPIs = @KPIValue
 GO
 
-CREATE FUNCTION 
-	fProductInventoriesWithPreviousMonthCountsWithKPIs(@value As INT)
-RETURNS
-	TABLE
-AS
-	RETURN 
-		SELECT
-			*
-		FROM 
-			vProductInventoriesWithPreviousMonthCountsWithKPIs
-		WHERE
-			[Count vs Previous Count KPI] = @value	
-GO 
+Select * From fProductInventoriesWithPreviousMonthCountsWithKPIs(1);
+Select * From fProductInventoriesWithPreviousMonthCountsWithKPIs(0);
+Select * From fProductInventoriesWithPreviousMonthCountsWithKPIs(-1);
 
-*/
-
-CREATE FUNCTION 
-	fProductInventoriesWithPreviousMonthCountsWithKPIs(@value As INT)
-RETURNS
-	TABLE
-AS
-	RETURN 
-		SELECT
-			*
-		FROM 
-			vProductInventoriesWithPreviousMonthCountsWithKPIs
-		WHERE
-			[Count vs Previous Count KPI] = @value	
-GO 
-
-
-/* Check that it works:
-SELECT * From fProductInventoriesWithPreviousMonthCountsWithKPIs(1);
-SELECT * From fProductInventoriesWithPreviousMonthCountsWithKPIs(0);
-SELECT * From fProductInventoriesWithPreviousMonthCountsWithKPIs(-1);
-*/
-go
+GO
 
 /***************************************************************************************/
