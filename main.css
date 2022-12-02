@@ -98,13 +98,23 @@ hr {
 
 footer {
     background-color:#ee2c72;
+    padding:25px;
+    text-align: center;
+    width:100%;
 }
 
-.footer-p {
-    padding:25px;
-    color:white;
+a {
+    color:white !important;
     text-align: center;
+    font-size:.75rem;
+    text-decoration: none;
+    display: block;
     margin:0 auto;
-    font-size:.9rem;
-    
+    width:100%;
+
+}
+
+a:visited {
+    color:white !important;
+    text-decoration: none;
 }
