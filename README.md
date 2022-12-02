@@ -2,4 +2,4 @@
 ## Assignment07_mGrilli
 
 **Check out my site!**
-[Click Here](https://mikegrilli.github.io/Assignment07_mGrilli/ )
+[Click Here](https://mikegrilli.github.io/DBFoundations-Module07/ )
