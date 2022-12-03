@@ -121,3 +121,29 @@ a:visited {
 .footer-p {
     width:100%;
 }
+
+@media screen and (max-width:700px) {
+    .main-wrapper,
+    .content-summary {
+        max-width: 100%;
+        width:100%;
+        margin:0;
+        padding:0;
+        background-color: white;
+    }
+    h1, .span-headline {
+        font-size: 3rem;
+        line-height: 1.1;
+    }
+   
+    p{
+        width:90%;
+        padding:0;
+    }
+    ul {
+        width:80%;
+    }
+    hr {
+        width:80%;
+    }
+}
