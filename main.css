@@ -13,12 +13,10 @@
     height:auto;
     background-color: #f2f2f2;
     padding:50px;
-    border-radius: 1.5% 1.5% 1.5% 0;
 }
 
 .header {
     margin:75px;
-   
 }
 
 h1 {
@@ -58,7 +56,8 @@ p {
     margin-bottom:1.5rem;
 }
 
-.content-topic,.content-summary {
+.content-topic,
+.content-summary {
     margin-top: 2rem;
     margin-left:4rem;
     margin-bottom: 50px;
@@ -117,4 +116,8 @@ a {
 a:visited {
     color:white !important;
     text-decoration: none;
+}
+
+.footer-p {
+    width:100%;
 }
